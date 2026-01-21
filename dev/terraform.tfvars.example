@@ -1,0 +1,349 @@
+# =============================================================================
+# Amplify GenAI Infrastructure Configuration
+# =============================================================================
+# This file contains all configuration options for deploying the Amplify GenAI
+# application to AWS. Copy this file to terraform.tfvars and fill in your values.
+#
+# REQUIRED: Fields marked as REQUIRED must be provided
+# OPTIONAL: Fields marked as OPTIONAL have defaults and can be omitted
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# AWS Account Configuration (REQUIRED)
+# -----------------------------------------------------------------------------
+
+# Your 12-digit AWS Account ID
+# Example: "123456789012"
+aws_account_id = ""
+
+# AWS Region for deployment
+# Example: "us-east-1", "us-west-2", "eu-west-1"
+# Default: "us-east-1"
+aws_region = "us-east-1"
+
+# Environment name (dev, staging, or prod)
+# This affects resource naming and tagging
+# Example: "dev", "staging", "prod"
+environment = "dev"
+
+# -----------------------------------------------------------------------------
+# Domain Configuration (REQUIRED)
+# -----------------------------------------------------------------------------
+
+# Application domain name (without https://)
+# This is where your application will be accessible
+# Example: "chat.example.com"
+application_domain = ""
+
+# Cognito domain prefix or custom domain
+# For prefix: "auth-myapp" (will become auth-myapp.auth.us-east-1.amazoncognito.com)
+# For custom: "auth.example.com" (requires ACM certificate)
+# Example: "auth.example.com" or "auth-myapp"
+cognito_domain = ""
+
+# Route53 Hosted Zone ID for your application domain
+# Find this in Route53 console for your domain
+# Example: "Z1234567890ABC"
+app_route53_zone_id = ""
+
+# Route53 Hosted Zone ID for Cognito custom domain (if using custom domain)
+# Leave empty if using Cognito domain prefix
+# Example: "Z1234567890ABC"
+cognito_route53_zone_id = ""
+
+# ACM Certificate ARN for HTTPS
+# Certificate must be in the same region and cover your domain
+# Example: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+acm_certificate_arn = ""
+
+# -----------------------------------------------------------------------------
+# Network Configuration (REQUIRED)
+# -----------------------------------------------------------------------------
+
+# VPC CIDR block
+# Must be a valid IPv4 CIDR block
+# Example: "10.0.0.0/16" or "172.31.0.0/16"
+vpc_cidr = "172.1.0.0/16"
+
+# Public subnet CIDR blocks (must be within VPC CIDR)
+# At least 2 subnets in different availability zones recommended
+# Example: ["10.0.1.0/24", "10.0.2.0/24"]
+public_subnet_cidrs = ["172.1.0.0/23", "172.1.2.0/23"]
+
+# Private subnet CIDR blocks (must be within VPC CIDR)
+# At least 2 subnets in different availability zones recommended
+# Example: ["10.0.10.0/24", "10.0.11.0/24"]
+private_subnet_cidrs = ["172.1.4.0/23", "172.1.8.0/23"]
+
+# -----------------------------------------------------------------------------
+# Resource Naming (REQUIRED)
+# -----------------------------------------------------------------------------
+
+# Project name for resource tagging
+# Used for cost tracking and resource organization
+# Example: "amplify-genai"
+project_name = "amplify-genai"
+
+# VPC name
+# Example: "amplify-vpc"
+vpc_name = "main-vpc"
+
+# ALB name
+# Example: "amplify-alb"
+alb_name = "amplifygenai-alb"
+
+# ECS cluster name
+# Example: "amplify-cluster"
+cluster_name = "amplifygenai-cluster"
+
+# ECS service name
+# Example: "amplify-service"
+service_name = "amplifygenai-service"
+
+# ECR repository name
+# Example: "amplify-repo"
+ecr_repo_name = "amplifygenai-repo"
+
+# Cognito User Pool name
+# Example: "AmplifyGenAI-UserPool"
+userpool_name = "AmplifyGenAI-UserPool"
+
+# -----------------------------------------------------------------------------
+# Notification Configuration (REQUIRED)
+# -----------------------------------------------------------------------------
+
+# Email address for ECS scaling alarms and notifications
+# Example: "devops@example.com"
+ecs_alarm_email = ""
+
+# -----------------------------------------------------------------------------
+# ECS Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# Container CPU units (256, 512, 1024, 2048, 4096)
+# Default: 1024
+container_cpu = 1024
+
+# Container memory in MB (512, 1024, 2048, 4096, 8192, 16384, 30720)
+# Must be compatible with CPU value
+# Default: 4096
+container_memory = 4096
+
+# Desired number of ECS tasks
+# Default: 1
+desired_count = 1
+
+# Minimum number of tasks for auto-scaling
+# Default: 1
+min_capacity = 1
+
+# Maximum number of tasks for auto-scaling
+# Default: 5
+max_capacity = 5
+
+# Target CPU utilization percentage for auto-scaling
+# Default: 75
+scale_target_value = 75
+
+# Cooldown period (seconds) after scaling in
+# Default: 300
+scale_in_cooldown = 300
+
+# Cooldown period (seconds) after scaling out
+# Default: 300
+scale_out_cooldown = 300
+
+# Container port (should match your application)
+# Default: 3000
+container_port = 3000
+
+# -----------------------------------------------------------------------------
+# ECR Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# Image tag mutability (MUTABLE or IMMUTABLE)
+# IMMUTABLE prevents tag overwriting
+# Default: "IMMUTABLE"
+image_tag_mutability = "IMMUTABLE"
+
+# Enable image scanning on push
+# Default: false
+scan_on_push = false
+
+# -----------------------------------------------------------------------------
+# Load Balancer Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# Target group port (should match container_port)
+# Default: 3000
+target_group_port = 3000
+
+# Target group name
+# Default: "amplifygenai-tg"
+target_group_name = "amplifygenai-tg"
+
+# ALB security group name
+# Default: "amplifygenai-sg"
+alb_security_group_name = "amplifygenai-sg"
+
+# ALB access logs bucket name
+# Default: "amplifygenai-alb-access-logs"
+alb_logging_bucket_name = "amplifygenai-alb-access-logs"
+
+# Enable root domain redirect (e.g., example.com -> www.example.com)
+# Default: false
+root_redirect = false
+
+# -----------------------------------------------------------------------------
+# CloudWatch Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# CloudWatch log group name
+# Default: "amplifygenai-loggroup"
+cloudwatch_log_group_name = "amplifygenai-loggroup"
+
+# CloudWatch log stream prefix
+# Default: "ecs"
+cloudwatch_log_stream_prefix = "ecs"
+
+# CloudWatch policy name
+# Default: "amplifygenai-cloudwatch-policy"
+cloudwatch_policy_name = "amplifygenai-cloudwatch-policy"
+
+# -----------------------------------------------------------------------------
+# IAM Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# Task execution role name
+# Default: "gen-ai-app-task-execution-role"
+task_execution_role_name = "gen-ai-app-task-execution-role"
+
+# Task role name
+# Default: "gen-ai-app-task-role"
+task_role_name = "gen-ai-app-task-role"
+
+# Task definition family name
+# Default: "gen-ai-app-task"
+task_name = "gen-ai-app-task"
+
+# Container name (DO NOT CHANGE - referenced by backend)
+# Default: "amplifyApp"
+container_name = "amplifyApp"
+
+# Secret access policy name
+# Default: "amplifygenai-secret-access-policy"
+secret_access_policy_name = "amplifygenai-secret-access-policy"
+
+# -----------------------------------------------------------------------------
+# Cognito Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# Cognito identity provider name
+# Default: "AmplifyGenAI"
+provider_name = "AmplifyGenAI"
+
+# Enable SAML identity provider
+# Default: false
+use_saml_idp = false
+
+# SAML metadata URL (required if use_saml_idp = true)
+# Example: "https://idp.example.com/metadata"
+sp_metadata_url = ""
+
+# Create pre-authentication Lambda trigger
+# Default: false
+create_pre_auth_lambda = false
+
+# Disable public signup (users must be created by admin)
+# Default: true
+disable_public_signup = true
+
+# OAuth callback URLs (auto-generated, but can be overridden)
+# Default: ["https://<application_domain>/api/auth/callback/cognito", "http://localhost:3000/api/auth/callback/cognito"]
+callback_urls = []
+
+# OAuth logout URLs (auto-generated, but can be overridden)
+# Default: ["https://<application_domain>", "http://localhost:3000"]
+logout_urls = []
+
+# -----------------------------------------------------------------------------
+# Secrets Manager Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# OpenAI API key secret name (DO NOT CHANGE)
+# Default: "openai-api-key"
+openai_api_key_name = "openai-api-key"
+
+# OpenAI endpoints secret name (DO NOT CHANGE)
+# Default: "openai-endpoints"
+openai_endpoints_name = "openai-endpoints"
+
+# Application secrets secret name (DO NOT CHANGE)
+# Default: "amplify-app-secrets"
+secret_name = "amplify-app-secrets"
+
+# Application environment variables secret name (DO NOT CHANGE)
+# Default: "amplify-app-vars"
+envs_name = "amplify-app-vars"
+
+# Initial secret values (will be auto-populated during deployment)
+# Leave empty - these will be generated/populated automatically
+secrets = {
+  COGNITO_CLIENT_SECRET = ""
+  OPENAI_API_KEY        = ""
+  NEXTAUTH_SECRET       = ""
+}
+
+# Initial environment variable values (will be auto-populated during deployment)
+# Leave empty - these will be generated/populated automatically
+envs = {
+  API_BASE_URL                = ""
+  ASSISTANTS_API_BASE         = ""
+  AVAILABLE_MODELS            = "anthropic.claude-3-sonnet-20240229-v1:0,anthropic.claude-3-haiku-20240307-v1:0,gpt-35-turbo,gpt-4-1106-Preview"
+  AZURE_API_NAME              = "openai"
+  AZURE_DEPLOYMENT_ID         = "gpt-4"
+  CHAT_ENDPOINT               = ""
+  COGNITO_CLIENT_ID           = ""
+  COGNITO_DOMAIN              = ""
+  COGNITO_ISSUER              = ""
+  DEFAULT_MODEL               = "anthropic.claude-3-haiku-20240307-v1:0"
+  DEFAULT_FUNCTION_CALL_MODEL = "gpt-4-1106-Preview"
+  MIXPANEL_TOKEN              = ""
+  NEXTAUTH_SECRET             = ""
+  NEXTAUTH_URL                = ""
+  OPENAI_API_HOST             = "https://api.openai.com"
+  OPENAI_API_TYPE             = "azure"
+  OPENAI_API_VERSION          = "2024-02-15-preview"
+}
+
+# -----------------------------------------------------------------------------
+# Alarm Configuration (OPTIONAL - defaults provided)
+# -----------------------------------------------------------------------------
+
+# ECS scale up alarm description
+# Default: "scaling up due to high CPU utilization"
+ecs_scale_up_alarm_description = "scaling up due to high CPU utilization"
+
+# ECS scale down alarm description
+# Default: "scaling down due to low CPU utilization"
+ecs_scale_down_alarm_description = "scaling down due to low CPU utilization"
+
+# -----------------------------------------------------------------------------
+# Optional: Bedrock Guardrails Configuration
+# -----------------------------------------------------------------------------
+
+# Enable Bedrock Guardrails
+# Default: false
+enable_bedrock_guardrails = false
+
+# Bedrock Guardrail ID (required if enable_bedrock_guardrails = true)
+# Example: "gr-1234567890abcdef"
+bedrock_guardrail_id = ""
+
+# Bedrock Guardrail Version (required if enable_bedrock_guardrails = true)
+# Example: "1"
+bedrock_guardrail_version = ""
+
+# =============================================================================
+# End of Configuration
+# =============================================================================
