@@ -2,7 +2,7 @@
 
 # Authors
 
-Allen Karns, Jules White, Karely Rodriguez, Max Moundas
+Allen Karns, Jules White, Karely Rodriguez, Max Moundas, Ashraf Ben
 
 # AWS Infrastructure for Amplify as Terraform Modules
 
