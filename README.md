@@ -28,7 +28,6 @@ The Terraform configuration is organized into modules for reusability and manage
 ### Load Balancer Module
 
 To set up the load balancer, include the following module configuration in your Terraform:
-#TODO: do we want to mention what file here?
 
 ```hcl
 module "load_balancer" {
